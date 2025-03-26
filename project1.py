@@ -1,5 +1,5 @@
 from PyQt6 import QtWidgets, QtCore
-import sys, time
+import sys
 
 class MyWindow(QtWidgets.QWidget):
     def __init__(self, parent=None) -> None:
@@ -18,20 +18,21 @@ class MyWindow(QtWidgets.QWidget):
         self.add_new_widget(QtWidgets.QPushButton("3"), "Три")
         self.add_new_widget(QtWidgets.QPushButton("Закрыть"), "Закрыть")
 
-    def on_click(self, message):
+    def on_click(self, message, widget):
         match message:
             case "Закрыть":
                 print(message)
-                time.sleep(1)
                 self.close()
             case _:
                 self.label.setText(message)
                 print(message)
+                widget.setText("Удаляем...")
+                QtCore.QTimer.singleShot(1000, widget.deleteLater) 
 
     def add_new_widget(self, widget, message):
         self.vbox.addWidget(widget)
         self.widget_list.append(widget)
-        widget.clicked.connect(lambda: self.on_click(message))
+        widget.clicked.connect(lambda: self.on_click(message, widget))
 
 
 app = QtWidgets.QApplication(sys.argv)
